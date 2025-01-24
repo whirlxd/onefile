@@ -1,7 +1,7 @@
 # ONEFILE - Web Bundler
 
 ## Description
-One File is a simple tool that allows you to bundle and minify HTML, CSS, and JavaScript files into a single HTML file. This tool helps in reducing the size of your files making it easier to repack them into qr codes. This was primarily created for the purpose of creating qr codes for saycheese ysws.
+One File is a simple tool that allows you to bundle and minify HTML, CSS, and JavaScript files into a single HTML file. This tool helps in reducing the size of your files making it easier to repack them into qr codes. This was primarily created for the purpose of creating qr codes for saycheese ysws. ( refer to minified file for the minified code )
 
 ## Features
 - Bundle HTML, CSS, and JavaScript files into a single HTML file.
