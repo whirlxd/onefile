@@ -1,0 +1,66 @@
+<html>
+<body>
+<div id="drop" style="border:2px dashed #555;padding:20px;text-align:center;cursor:pointer;">Drop/Click</div>
+<ul id="list" style="list-style:none;padding:0;"></ul>
+<button id="bundle" disabled>Bundle</button>
+<script>
+    const d = document,
+    z = d.getElementById("drop"),
+    l = d.getElementById("list"),
+    b = d.getElementById("bundle"),
+    f = { h: null, c: null, j: null };
+function mH(h) {
+    return h.replace(/<!--[\s\S]*?-->/g, "").replace(/\s+/g, " ");
+}
+function mC(c) {
+    return c.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\s+/g, " ");
+}
+function mJ(j) {
+    return j.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n\r]*/g, "").replace(/\s+/g, " ");
+}
+function u() {
+    l.innerHTML = "";
+    Object.entries(f).forEach(([t, v]) => {
+        if (v) {
+            let i = d.createElement("li");
+            i.textContent = v.name;
+            l.appendChild(i);
+        }
+    });
+    b.disabled = !(f.h || f.c || f.j);
+}
+function g(e) {
+    [...e.files].forEach((x) => {
+        let t = x.name.split(".").pop();
+        if (["html", "css", "js"].includes(t)) {
+            f[t[0]] = x;
+            u();
+        }
+    });
+}
+z.addEventListener("click", () => {
+    let i = d.createElement("input");
+    i.type = "file";
+    i.multiple = !0;
+    i.addEventListener("change", (e) => g(e.target));
+    i.click();
+});
+z.addEventListener("dragover", (e) => e.preventDefault());
+z.addEventListener("drop", (e) => (e.preventDefault(), g(e.dataTransfer)));
+b.addEventListener("click", async () => {
+    let h = f.h
+            ? await f.h.text()
+            : "<!DOCTYPE html><html><head><title>Bundle</title></head><body></body></html>",
+        c = f.c ? await f.c.text() : "",
+        j = f.j ? await f.j.text() : "";
+    h = mH(h);
+    if (c) h = h.replace("</head>", `<style>${mC(c)}</style></head>`);
+    if (j) h = h.replace("</body>", `<script>${mJ(j).replace(/<\/script>/g, "<\\/script>")}<\\/script></body>`);
+    let a = d.createElement("a");
+    a.href = URL.createObjectURL(new Blob([h], { type: "text/html" }));
+    a.download = "bundle.html";
+    a.click();
+});
+</script>
+</body>
+</html>
